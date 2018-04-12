@@ -1,0 +1,16 @@
+[
+{
+  "modid": "BetterPing",
+  "name": "Better Ping",
+  "description": "Shows the actual ping number instead of just bars in the player list.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Quintinity"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
