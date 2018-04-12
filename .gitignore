@@ -1,0 +1,8 @@
+libs/
+out/
+run/
+.gradle/
+.idea/
+.settings/
+
+*.iml

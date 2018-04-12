@@ -8,7 +8,7 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraftforge.common.MinecraftForge;
 
-@Mod(modid = BetterPing.MODID, version = "1.0")
+@Mod(modid = BetterPing.MODID, version = "1.0", acceptableRemoteVersions="*")
 public class BetterPing {
 
     static final String MODID = "BetterPing";
@@ -16,7 +16,7 @@ public class BetterPing {
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) 
     {
-        if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
             MinecraftForge.EVENT_BUS.register(new RenderPingHandler());
         }
     }
