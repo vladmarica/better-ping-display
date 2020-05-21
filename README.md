@@ -1,6 +1,6 @@
 # Better Ping
 
-[![](https://cf.way2muchnoise.eu/292038.svg)](https://minecraft.curseforge.com/projects/better-ping)
+[![](https://cf.way2muchnoise.eu/292038.svg)](https://curseforge.com/minecraft/mc-mods/better-ping-display)
 
 A mod for Minecraft 1.7.10 and 1.12.2 to display each player's ping in the player list as a number.
 
