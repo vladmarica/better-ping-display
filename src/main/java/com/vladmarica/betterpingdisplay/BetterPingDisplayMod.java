@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = BetterPingDisplayMod.MODID, version = "0.1", acceptableRemoteVersions="*")
+@Mod(modid = BetterPingDisplayMod.MODID, version = "1.0", acceptableRemoteVersions="*")
 public class BetterPingDisplayMod {
 
     static final String MODID = "betterpingdisplay";
