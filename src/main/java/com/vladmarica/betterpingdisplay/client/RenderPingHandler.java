@@ -2,6 +2,7 @@ package com.vladmarica.betterpingdisplay.client;
 
 import com.google.common.collect.Ordering;
 import com.mojang.authlib.GameProfile;
+import com.vladmarica.betterpingdisplay.BetterPingDisplayConfig;
 import com.vladmarica.betterpingdisplay.BetterPingDisplayMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -29,10 +30,37 @@ public class RenderPingHandler {
 
     private static final Ordering<NetworkPlayerInfo> ENTRY_ORDERING = Ordering.from(new PlayerComparator());
 
-    private static final int PING_TEXT_COLOR = 0xA0A0A0;
+    private static final int DEFAULT_PING_TEXT_COLOR = 0xA0A0A0;
+    private static final String DEFAULT_PING_TEXT_FORMAT = "%dms";
     private static final int PING_TEXT_RENDER_OFFSET = -13;
     private static final int PLAYER_SLOT_EXTRA_WIDTH = 45;
     private static final int PLAYER_ICON_WIDTH = 9;
+
+    private int pingTextColor;
+    private String pingTextFormat;
+
+    public RenderPingHandler() {
+        if (BetterPingDisplayConfig.textColor.startsWith("#")) {
+            try {
+                pingTextColor = Integer.parseInt(BetterPingDisplayConfig.textColor.substring(1), 16);
+                BetterPingDisplayMod.logger().error("Config option 'pingTextColor' is invalid - it must be a hex color code");
+            }
+            catch (NumberFormatException ex) {
+                pingTextColor = DEFAULT_PING_TEXT_COLOR;
+            }
+        }
+        else {
+            pingTextColor = DEFAULT_PING_TEXT_COLOR;
+        }
+
+        if (BetterPingDisplayConfig.textFormatString.contains("%d")) {
+            pingTextFormat = BetterPingDisplayConfig.textFormatString;
+            BetterPingDisplayMod.logger().error("Config option 'textFormatString' is invalid - it needs to contain %d");
+        }
+        else {
+            pingTextFormat = DEFAULT_PING_TEXT_FORMAT;
+        }
+    }
 
     @SubscribeEvent
     public void onRenderGuiPre(RenderGameOverlayEvent.Pre event) {
@@ -164,19 +192,19 @@ public class RenderPingHandler {
                     int k5 = j2 + i + 1;
                     int l5 = k5 + l;
 
-                    if (l5 - k5 > 5)
-                    {
+                    if (l5 - k5 > 5) {
                         playerListGui.drawScoreboardValues(objective, k2, gameprofile.getName(), k5, l5, player);
                     }
                 }
 
                 // Here is the magic, rendering the ping text
-                String pingString = player.getResponseTime() + "ms";
+                String pingString = String.format(pingTextFormat, player.getResponseTime());
                 int pingStringWidth = mc.fontRenderer.getStringWidth(pingString);
                 mc.fontRenderer.drawStringWithShadow(
                         pingString,
                         (float) i1 + j2 - pingStringWidth + PING_TEXT_RENDER_OFFSET - (displayPlayerIcons ? PLAYER_ICON_WIDTH : 0),
-                        (float) k2, PING_TEXT_COLOR);
+                        (float) k2,
+                        pingTextColor);
 
                 // Render the vanilla ping bars as well
                 playerListGui.drawPing(i1, j2 - (displayPlayerIcons ? PLAYER_ICON_WIDTH : 0), k2, player);

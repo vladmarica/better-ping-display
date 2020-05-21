@@ -1,6 +1,7 @@
 package com.vladmarica.betterpingdisplay;
 
 import com.vladmarica.betterpingdisplay.client.RenderPingHandler;
+import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -14,11 +15,13 @@ import org.apache.logging.log4j.Logger;
 public class BetterPingDisplayMod {
 
     static final String MODID = "betterpingdisplay";
+    static BetterPingDisplayMod INSTANCE;
 
     private Logger logger;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        INSTANCE = this;
         this.logger = event.getModLog();
     }
 
@@ -29,5 +32,9 @@ public class BetterPingDisplayMod {
             logger.info("Registering render ping handler");
             MinecraftForge.EVENT_BUS.register(new RenderPingHandler());
         }
+    }
+
+    public static Logger logger() {
+        return INSTANCE.logger;
     }
 }
