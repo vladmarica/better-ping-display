@@ -1,15 +1,15 @@
 package com.vladmarica.betterpingdisplay.client;
 
 import com.google.common.collect.ComparisonChain;
-import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.client.network.play.NetworkPlayerInfo;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.world.GameType;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Comparator;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class PlayerComparator implements Comparator<NetworkPlayerInfo>
 {
     public int compare(NetworkPlayerInfo player1, NetworkPlayerInfo player2)

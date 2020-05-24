@@ -1,40 +1,43 @@
 package com.vladmarica.betterpingdisplay;
 
 import com.vladmarica.betterpingdisplay.client.RenderPingHandler;
-import net.minecraftforge.common.config.ConfigManager;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.ExtensionPoint;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.fml.network.FMLNetworkConstants;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = BetterPingDisplayMod.MODID, version = "1.0", acceptableRemoteVersions="*")
+// The value here should match an entry in the META-INF/mods.toml file
+@Mod(BetterPingDisplayMod.MODID)
 public class BetterPingDisplayMod {
+    public static final String MODID = "betterpingdisplay";
 
-    static final String MODID = "betterpingdisplay";
-    static BetterPingDisplayMod INSTANCE;
+    private static final Logger LOGGER = LogManager.getLogger();
 
-    private Logger logger;
+    public BetterPingDisplayMod() {
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, BetterPingDisplayConfig.CLIENT_SPEC);
 
-    @EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
-        INSTANCE = this;
-        this.logger = event.getModLog();
+        ModLoadingContext.get().registerExtensionPoint(
+                ExtensionPoint.DISPLAYTEST,
+                () -> Pair.of(() -> FMLNetworkConstants.IGNORESERVERONLY, (a, b) -> true));
     }
 
-    @EventHandler
-    public void postInit(FMLPostInitializationEvent event)
-    {
-        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-            logger.info("Registering render ping handler");
-            MinecraftForge.EVENT_BUS.register(new RenderPingHandler());
-        }
+    private void doClientStuff(final FMLClientSetupEvent event) {
+       if (FMLEnvironment.dist == Dist.CLIENT) {
+           MinecraftForge.EVENT_BUS.register(new RenderPingHandler());
+       }
     }
 
     public static Logger logger() {
-        return INSTANCE.logger;
+        return LOGGER;
     }
 }
