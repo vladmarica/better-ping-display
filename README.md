@@ -1,4 +1,4 @@
-# Better Ping
+# Better Ping Display
 
 [![](http://cf.way2muchnoise.eu/better-ping-display.svg)](https://curseforge.com/minecraft/mc-mods/better-ping-display) [![](http://cf.way2muchnoise.eu/versions/better-ping-display.svg)](https://curseforge.com/minecraft/mc-mods/better-ping-display)
 
