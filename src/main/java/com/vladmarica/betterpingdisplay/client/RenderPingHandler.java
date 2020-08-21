@@ -1,5 +1,6 @@
 package com.vladmarica.betterpingdisplay.client;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.vladmarica.betterpingdisplay.BetterPingDisplayConfig;
 import com.vladmarica.betterpingdisplay.BetterPingDisplayMod;
 import com.google.common.collect.Ordering;
@@ -15,14 +16,19 @@ import net.minecraft.entity.player.PlayerModelPart;
 import net.minecraft.scoreboard.ScoreCriteria;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.GameType;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Iterator;
 import java.util.List;
 
+@OnlyIn(Dist.CLIENT)
 public class RenderPingHandler {
     private static final Ordering<NetworkPlayerInfo> ENTRY_ORDERING = Ordering.from(new PlayerComparator());
 
@@ -69,12 +75,12 @@ public class RenderPingHandler {
                 configLoaded = true;
             }
 
-            this.renderPlayerList(Minecraft.getInstance());
+            this.renderPlayerList(event.getMatrixStack(), Minecraft.getInstance());
         }
     }
 
     /** Copied and modified from {@link net.minecraft.client.gui.overlay.PlayerTabOverlayGui#render}. */
-    private void renderPlayerList(Minecraft mc) {
+    private void renderPlayerList(MatrixStack matrixStack, Minecraft mc) {
         PlayerTabOverlayGui playerListGui = mc.ingameGUI.getTabList();
         int width = mc.getMainWindow().getScaledWidth();
         Scoreboard scoreboard = mc.world.getScoreboard();
@@ -89,14 +95,13 @@ public class RenderPingHandler {
         int nameStringWidth;
         while(playerIterator.hasNext()) {
             NetworkPlayerInfo playerInfo = (NetworkPlayerInfo)playerIterator.next();
-            nameStringWidth = mc.fontRenderer.getStringWidth(playerListGui.getDisplayName(playerInfo).getFormattedText());
+            nameStringWidth = mc.fontRenderer.func_238414_a_(playerListGui.getDisplayName(playerInfo));
             i = Math.max(i, nameStringWidth);
             if (objective != null && objective.getRenderType() != ScoreCriteria.RenderType.HEARTS) {
                 nameStringWidth = mc.fontRenderer.getStringWidth(" " + scoreboard.getOrCreateScore(playerInfo.getGameProfile().getName(), objective).getScorePoints());
                 j = Math.max(j, nameStringWidth);
             }
         }
-
 
         playerList = playerList.subList(0, Math.min(playerList.size(), 80));
         int playerCount = playerList.size();
@@ -124,37 +129,37 @@ public class RenderPingHandler {
         int k1 = 10;
         int l1 = i1 * k4 + (k4 - 1) * 5;
         
-        List<String> list1 = null;
+        List<ITextProperties> list1 = null;
         if (playerListGui.header != null) {
-            list1 = mc.fontRenderer.listFormattedStringToWidth(playerListGui.header.getFormattedText(), width - 50);
+            list1 = mc.fontRenderer.func_238425_b_(playerListGui.header, width - 50);
 
-            for(String s : list1) {
-                l1 = Math.max(l1, mc.fontRenderer.getStringWidth(s));
+            for(ITextProperties s : list1) {
+                l1 = Math.max(l1, mc.fontRenderer.func_238414_a_(s)); /* getStringWidth */
             }
         }
 
-        List<String> list2 = null;
+        List<ITextProperties> list2 = null;
         if (playerListGui.footer != null) {
-            list2 = mc.fontRenderer.listFormattedStringToWidth(playerListGui.footer.getFormattedText(), width - 50);
+            list2 = mc.fontRenderer.func_238425_b_(playerListGui.footer, width - 50);
 
-            for(String s1 : list2) {
-                l1 = Math.max(l1, mc.fontRenderer.getStringWidth(s1));
+            for(ITextProperties s1 : list2) {
+                l1 = Math.max(l1, mc.fontRenderer.func_238414_a_(s1)); /* getStringWidth */
             }
         }
 
         if (list1 != null) {
-            AbstractGui.fill(width / 2 - l1 / 2 - 1, k1 - 1, width / 2 + l1 / 2 + 1, k1 + list1.size() * 9, Integer.MIN_VALUE);
+            AbstractGui.fill(matrixStack, width / 2 - l1 / 2 - 1, k1 - 1, width / 2 + l1 / 2 + 1, k1 + list1.size() * 9, Integer.MIN_VALUE); /* fill */
 
-            for(String s2 : list1) {
-                int i2 = mc.fontRenderer.getStringWidth(s2);
-                mc.fontRenderer.drawStringWithShadow(s2, (float)(width / 2 - i2 / 2), (float)k1, -1);
+            for(ITextProperties s2 : list1) {
+                int i2 = mc.fontRenderer.func_238414_a_(s2); /* getStringWidth */
+                mc.fontRenderer.func_238407_a_(matrixStack, s2, (float)(width / 2 - i2 / 2), (float)k1, -1); /* drawStringWithShadow */
                 k1 += 9;
             }
 
             ++k1;
         }
 
-        AbstractGui.fill(width / 2 - l1 / 2 - 1, k1 - 1, width / 2 + l1 / 2 + 1, k1 + j4 * 9, Integer.MIN_VALUE);
+        AbstractGui.fill(matrixStack, width / 2 - l1 / 2 - 1, k1 - 1, width / 2 + l1 / 2 + 1, k1 + j4 * 9, Integer.MIN_VALUE); /* fill */
         int l4 = mc.gameSettings.getChatBackgroundColor(553648127);
 
         for(int playerIndex = 0; playerIndex < playerCount; ++playerIndex) {
@@ -162,7 +167,7 @@ public class RenderPingHandler {
             int j2 = playerIndex % j4;
             int k2 = j1 + j5 * i1 + j5 * 5;
             int l2 = k1 + j2 * 9;
-            AbstractGui.fill(k2, l2, k2 + i1, l2 + 8, l4);
+            AbstractGui.fill(matrixStack, k2, l2, k2 + i1, l2 + 8, l4); /* fill */
             RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
             RenderSystem.enableAlphaTest();
             RenderSystem.enableBlend();
@@ -176,51 +181,49 @@ public class RenderPingHandler {
                     mc.getTextureManager().bindTexture(player.getLocationSkin());
                     int i3 = 8 + (flag1 ? 8 : 0);
                     int j3 = 8 * (flag1 ? -1 : 1);
-                    AbstractGui.blit(k2, l2, 8, 8, 8.0F, (float)i3, 8, j3, 64, 64);
+                    AbstractGui.blit(matrixStack, k2, l2, 8, 8, 8.0F, (float)i3, 8, j3, 64, 64);
                     if (playerentity != null && playerentity.isWearing(PlayerModelPart.HAT)) {
                         int k3 = 8 + (flag1 ? 8 : 0);
                         int l3 = 8 * (flag1 ? -1 : 1);
-                        AbstractGui.blit(k2, l2, 8, 8, 40.0F, (float)k3, 8, l3, 64, 64);
+                        AbstractGui.blit(matrixStack, k2, l2, 8, 8, 40.0F, (float)k3, 8, l3, 64, 64);
                     }
 
                     k2 += PLAYER_ICON_WIDTH;
                 }
 
-                String s4 = playerListGui.getDisplayName(player).getFormattedText();
-                if (player.getGameType() == GameType.SPECTATOR) {
-                    mc.fontRenderer.drawStringWithShadow(TextFormatting.ITALIC + s4, (float)k2, (float)l2, -1862270977);
-                } else {
-                    mc.fontRenderer.drawStringWithShadow(s4, (float)k2, (float)l2, -1);
-                }
+                ITextProperties displayName = playerListGui.getDisplayName(player);
+                int nameColor = player.getGameType() == GameType.SPECTATOR ? -1862270977 : -1;
+                mc.fontRenderer.func_238407_a_(matrixStack, displayName, (float)k2, (float)l2, nameColor);
 
                 if (objective != null && player.getGameType() != GameType.SPECTATOR) {
                     int l5 = k2 + i + 1;
                     int i6 = l5 + l;
                     if (i6 - l5 > 5) {
-                        playerListGui.drawScoreboardValues(objective, l2, gameprofile.getName(), l5, i6, player);
+                        playerListGui.func_175247_a_(objective, l2, gameprofile.getName(), l5, i6, player, matrixStack);
                     }
                 }
 
                 // Here is the magic, rendering the ping text
                 String pingString = String.format(pingTextFormat, player.getResponseTime());
                 int pingStringWidth = mc.fontRenderer.getStringWidth(pingString);
-                mc.fontRenderer.drawStringWithShadow(
-                        pingString,
+                mc.fontRenderer.func_238407_a_(
+                        matrixStack,
+                        new StringTextComponent(pingString),
                         (float) i1 + k2 - pingStringWidth + PING_TEXT_RENDER_OFFSET - (displayPlayerIcons ? PLAYER_ICON_WIDTH : 0),
                         (float) l2,
                         pingTextColor);
 
-                playerListGui.drawPing(i1, k2 - (displayPlayerIcons ? PLAYER_ICON_WIDTH : 0), l2, player);
+                playerListGui.func_238522_a_(matrixStack, i1, k2 - (displayPlayerIcons ? PLAYER_ICON_WIDTH : 0), l2, player); /* drawPing */
             }
         }
 
         if (list2 != null) {
             k1 = k1 + j4 * 9 + 1;
-            AbstractGui.fill(width / 2 - l1 / 2 - 1, k1 - 1, width / 2 + l1 / 2 + 1, k1 + list2.size() * 9, Integer.MIN_VALUE);
+            AbstractGui.fill(matrixStack, width / 2 - l1 / 2 - 1, k1 - 1, width / 2 + l1 / 2 + 1, k1 + list2.size() * 9, Integer.MIN_VALUE);
 
-            for(String s3 : list2) {
-                int k5 = mc.fontRenderer.getStringWidth(s3);
-                mc.fontRenderer.drawStringWithShadow(s3, (float)(width / 2 - k5 / 2), (float)k1, -1);
+            for(ITextProperties s3 : list2) {
+                int k5 = mc.fontRenderer.func_238414_a_(s3);
+                mc.fontRenderer.func_238407_a_(matrixStack, s3, (float)(width / 2 - k5 / 2), (float)k1, -1);
                 k1 += 9;
             }
         }
