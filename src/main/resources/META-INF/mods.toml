@@ -9,6 +9,8 @@ modLoader="javafml" #mandatory
 loaderVersion="[31,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
 # A URL to refer people to when problems occur with this mod
 issueTrackerURL="https://github.com/Quintinity/better-ping-display/issues" #optional
+license="MIT"
+
 # A list of mods - how many allowed here is determined by the individual mod loader
 [[mods]] #mandatory
     # The modid of the mod
@@ -22,21 +24,21 @@ issueTrackerURL="https://github.com/Quintinity/better-ping-display/issues" #opti
     # The description text for the mod (multi line!) (#mandatory)
     description='''Shows the actual ping number instead of just bars in the player list.'''
 
-    [[dependencies.examplemod]] #optional
+    [[dependencies.betterpingdisplay]] #optional
         # the modid of the dependency
         modId="forge" #mandatory
         # Does this dependency have to exist - if not, ordering below must be specified
         mandatory=true #mandatory
         # The version range of the dependency
-        versionRange="[31,)" #mandatory
+        versionRange="[33,)" #mandatory
         # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
         ordering="NONE"
         # Side this dependency is applied on - BOTH, CLIENT or SERVER
         side="BOTH"
 
-    [[dependencies.examplemod]]
+    [[dependencies.betterpingdisplay]]
         modId="minecraft"
         mandatory=true
-        versionRange="[1.15.2]"
+        versionRange="[1.16.2]"
         ordering="NONE"
         side="BOTH"
