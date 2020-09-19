@@ -99,7 +99,7 @@ public class RenderPingHandler {
         int nameStringWidth;
         while(playerIterator.hasNext()) {
             NetworkPlayerInfo playerInfo = (NetworkPlayerInfo)playerIterator.next();
-            nameStringWidth = mc.fontRenderer.func_238414_a_(playerListGui.getDisplayName(playerInfo));
+            nameStringWidth = mc.fontRenderer.getStringPropertyWidth(playerListGui.getDisplayName(playerInfo));
             i = Math.max(i, nameStringWidth);
             if (objective != null && objective.getRenderType() != ScoreCriteria.RenderType.HEARTS) {
                 nameStringWidth = mc.fontRenderer.getStringWidth(" " + scoreboard.getOrCreateScore(playerInfo.getGameProfile().getName(), objective).getScorePoints());
@@ -135,7 +135,7 @@ public class RenderPingHandler {
         
         List<IReorderingProcessor> list1 = null;
         if (playerListGui.header != null) {
-            list1 = mc.fontRenderer.func_238425_b_(playerListGui.header, width - 50);
+            list1 = mc.fontRenderer.trimStringToWidth(playerListGui.header, width - 50);
 
             for(IReorderingProcessor s : list1) {
                 l1 = Math.max(l1, mc.fontRenderer.func_243245_a(s)); /* getStringWidth */
@@ -144,7 +144,7 @@ public class RenderPingHandler {
 
         List<IReorderingProcessor> list2 = null;
         if (playerListGui.footer != null) {
-            list2 = mc.fontRenderer.func_238425_b_(playerListGui.footer, width - 50);
+            list2 = mc.fontRenderer.trimStringToWidth(playerListGui.footer, width - 50);
 
             for(IReorderingProcessor s1 : list2) {
                 l1 = Math.max(l1, mc.fontRenderer.func_243245_a(s1)); /* getStringWidth */
