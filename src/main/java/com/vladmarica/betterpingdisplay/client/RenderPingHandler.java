@@ -43,9 +43,9 @@ public class RenderPingHandler {
         if (BetterPingDisplayConfig.textColor.startsWith("#")) {
             try {
                 pingTextColor = Integer.parseInt(BetterPingDisplayConfig.textColor.substring(1), 16);
-                BetterPingDisplayMod.logger().error("Config option 'pingTextColor' is invalid - it must be a hex color code");
             }
             catch (NumberFormatException ex) {
+                BetterPingDisplayMod.logger().error("Config option 'pingTextColor' is invalid - it must be a hex color code");
                 pingTextColor = DEFAULT_PING_TEXT_COLOR;
             }
         }
@@ -55,9 +55,9 @@ public class RenderPingHandler {
 
         if (BetterPingDisplayConfig.textFormatString.contains("%d")) {
             pingTextFormat = BetterPingDisplayConfig.textFormatString;
-            BetterPingDisplayMod.logger().error("Config option 'textFormatString' is invalid - it needs to contain %d");
         }
         else {
+            BetterPingDisplayMod.logger().error("Config option 'textFormatString' is invalid - it needs to contain %d");
             pingTextFormat = DEFAULT_PING_TEXT_FORMAT;
         }
     }
