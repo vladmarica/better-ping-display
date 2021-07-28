@@ -81,17 +81,15 @@ public class RenderPingHandler {
         }
     }
 
-    /** Copied and modified from
-     * {@link net.minecraft.client.gui.overlay.PlayerTabOverlayGui#func_238523_a_}.
-     */
+    /** Copied and modified from {@link PlayerTabOverlayGui#render}.  */
     private void renderPlayerList(MatrixStack matrixStack, Minecraft mc) {
-        PlayerTabOverlayGui playerListGui = mc.ingameGUI.getTabList();
-        int width = mc.getMainWindow().getScaledWidth();
-        Scoreboard scoreboard = mc.world.getScoreboard();
-        ScoreObjective objective = scoreboard.getObjectiveInDisplaySlot(0);
+        PlayerTabOverlayGui playerListGui = mc.gui.getTabList();
+        int width = mc.getWindow().getGuiScaledWidth();
+        Scoreboard scoreboard = mc.level.getScoreboard();
+        ScoreObjective objective = scoreboard.getDisplayObjective(0);
 
         ClientPlayNetHandler handler = mc.player.connection;
-        List<NetworkPlayerInfo> playerList = ENTRY_ORDERING.sortedCopy(handler.getPlayerInfoMap());
+        List<NetworkPlayerInfo> playerList = ENTRY_ORDERING.sortedCopy(handler.getOnlinePlayers());
         int i = 0;
         int j = 0;
         Iterator playerIterator = playerList.iterator();
@@ -99,10 +97,10 @@ public class RenderPingHandler {
         int nameStringWidth;
         while(playerIterator.hasNext()) {
             NetworkPlayerInfo playerInfo = (NetworkPlayerInfo)playerIterator.next();
-            nameStringWidth = mc.fontRenderer.getStringPropertyWidth(playerListGui.getDisplayName(playerInfo));
+            nameStringWidth = mc.font.width(playerListGui.getNameForDisplay(playerInfo));
             i = Math.max(i, nameStringWidth);
             if (objective != null && objective.getRenderType() != ScoreCriteria.RenderType.HEARTS) {
-                nameStringWidth = mc.fontRenderer.getStringWidth(" " + scoreboard.getOrCreateScore(playerInfo.getGameProfile().getName(), objective).getScorePoints());
+                nameStringWidth = mc.font.width(" " + scoreboard.getOrCreatePlayerScore(playerInfo.getProfile().getName(), objective).getScore());
                 j = Math.max(j, nameStringWidth);
             }
         }
@@ -116,7 +114,7 @@ public class RenderPingHandler {
             ++k4;
         }
 
-        boolean displayPlayerIcons = mc.isIntegratedServerRunning() || mc.getConnection().getNetworkManager().isEncrypted();
+        boolean displayPlayerIcons = mc.isLocalServer() || mc.getConnection().getConnection().isEncrypted();
         int l;
         if (objective != null) {
             if (objective.getRenderType() == ScoreCriteria.RenderType.HEARTS) {
@@ -135,19 +133,19 @@ public class RenderPingHandler {
         
         List<IReorderingProcessor> list1 = null;
         if (playerListGui.header != null) {
-            list1 = mc.fontRenderer.trimStringToWidth(playerListGui.header, width - 50);
+            list1 = mc.font.split(playerListGui.header, width - 50);
 
             for(IReorderingProcessor s : list1) {
-                l1 = Math.max(l1, mc.fontRenderer.func_243245_a(s)); /* getStringWidth */
+                l1 = Math.max(l1, mc.font.width(s)); /* getStringWidth */
             }
         }
 
         List<IReorderingProcessor> list2 = null;
         if (playerListGui.footer != null) {
-            list2 = mc.fontRenderer.trimStringToWidth(playerListGui.footer, width - 50);
+            list2 = mc.font.split(playerListGui.footer, width - 50);
 
             for(IReorderingProcessor s1 : list2) {
-                l1 = Math.max(l1, mc.fontRenderer.func_243245_a(s1)); /* getStringWidth */
+                l1 = Math.max(l1, mc.font.width(s1)); /* getStringWidth */
             }
         }
 
@@ -155,8 +153,8 @@ public class RenderPingHandler {
             AbstractGui.fill(matrixStack, width / 2 - l1 / 2 - 1, k1 - 1, width / 2 + l1 / 2 + 1, k1 + list1.size() * 9, Integer.MIN_VALUE); /* fill */
 
             for(IReorderingProcessor s2 : list1) {
-                int i2 = mc.fontRenderer.func_243245_a(s2); /* getStringWidth */
-                mc.fontRenderer.func_238407_a_(matrixStack, s2, (float)(width / 2 - i2 / 2), (float)k1, -1); /* drawStringWithShadow */
+                int i2 = mc.font.width(s2); /* getStringWidth */
+                mc.font.drawShadow(matrixStack, s2, (float)(width / 2 - i2 / 2), (float)k1, -1); /* drawStringWithShadow */
                 k1 += 9;
             }
 
@@ -164,7 +162,7 @@ public class RenderPingHandler {
         }
 
         AbstractGui.fill(matrixStack, width / 2 - l1 / 2 - 1, k1 - 1, width / 2 + l1 / 2 + 1, k1 + j4 * 9, Integer.MIN_VALUE); /* fill */
-        int l4 = mc.gameSettings.getChatBackgroundColor(553648127);
+        int l4 = mc.options.getBackgroundColor(553648127);
 
         for(int playerIndex = 0; playerIndex < playerCount; ++playerIndex) {
             int j5 = playerIndex / j4;
@@ -178,15 +176,15 @@ public class RenderPingHandler {
             RenderSystem.defaultBlendFunc();
             if (playerIndex < playerList.size()) {
                 NetworkPlayerInfo player = playerList.get(playerIndex);
-                GameProfile gameprofile = player.getGameProfile();
+                GameProfile gameprofile = player.getProfile();
                 if (displayPlayerIcons) {
-                    PlayerEntity playerentity = mc.world.getPlayerByUuid(gameprofile.getId());
-                    boolean flag1 = playerentity != null && playerentity.isWearing(PlayerModelPart.CAPE) && ("Dinnerbone".equals(gameprofile.getName()) || "Grumm".equals(gameprofile.getName()));
-                    mc.getTextureManager().bindTexture(player.getLocationSkin());
+                    PlayerEntity playerentity = mc.level.getPlayerByUUID(gameprofile.getId());
+                    boolean flag1 = playerentity != null && playerentity.isModelPartShown(PlayerModelPart.CAPE) && ("Dinnerbone".equals(gameprofile.getName()) || "Grumm".equals(gameprofile.getName()));
+                    mc.getTextureManager().bind(player.getSkinLocation());
                     int i3 = 8 + (flag1 ? 8 : 0);
                     int j3 = 8 * (flag1 ? -1 : 1);
                     AbstractGui.blit(matrixStack, k2, l2, 8, 8, 8.0F, (float)i3, 8, j3, 64, 64);
-                    if (playerentity != null && playerentity.isWearing(PlayerModelPart.HAT)) {
+                    if (playerentity != null && playerentity.isModelPartShown(PlayerModelPart.HAT)) {
                         int k3 = 8 + (flag1 ? 8 : 0);
                         int l3 = 8 * (flag1 ? -1 : 1);
                         AbstractGui.blit(matrixStack, k2, l2, 8, 8, 40.0F, (float)k3, 8, l3, 64, 64);
@@ -195,29 +193,29 @@ public class RenderPingHandler {
                     k2 += PLAYER_ICON_WIDTH;
                 }
 
-                ITextComponent displayName = playerListGui.getDisplayName(player);
-                int nameColor = player.getGameType() == GameType.SPECTATOR ? -1862270977 : -1;
-                mc.fontRenderer.func_243246_a(matrixStack, displayName, (float)k2, (float)l2, nameColor);
+                ITextComponent displayName = playerListGui.getNameForDisplay(player);
+                int nameColor = player.getGameMode() == GameType.SPECTATOR ? -1862270977 : -1;
+                mc.font.drawShadow(matrixStack, displayName, (float)k2, (float)l2, nameColor);
 
-                if (objective != null && player.getGameType() != GameType.SPECTATOR) {
+                if (objective != null && player.getGameMode() != GameType.SPECTATOR) {
                     int l5 = k2 + i + 1;
                     int i6 = l5 + l;
                     if (i6 - l5 > 5) {
-                        playerListGui.func_175247_a_(objective, l2, gameprofile.getName(), l5, i6, player, matrixStack);
+                        playerListGui.renderTablistScore(objective, l2, gameprofile.getName(), l5, i6, player, matrixStack);
                     }
                 }
 
                 // Here is the magic, rendering the ping text
-                String pingString = String.format(pingTextFormat, player.getResponseTime());
-                int pingStringWidth = mc.fontRenderer.getStringWidth(pingString);
-                mc.fontRenderer.func_243246_a(
+                String pingString = String.format(pingTextFormat, player.getLatency());
+                int pingStringWidth = mc.font.width(pingString);
+                mc.font.drawShadow(
                         matrixStack,
                         new StringTextComponent(pingString),
                         (float) i1 + k2 - pingStringWidth + PING_TEXT_RENDER_OFFSET - (displayPlayerIcons ? PLAYER_ICON_WIDTH : 0),
                         (float) l2,
                         pingTextColor);
 
-                playerListGui.func_238522_a_(matrixStack, i1, k2 - (displayPlayerIcons ? PLAYER_ICON_WIDTH : 0), l2, player); /* drawPing */
+                playerListGui.renderPingIcon(matrixStack, i1, k2 - (displayPlayerIcons ? PLAYER_ICON_WIDTH : 0), l2, player); /* drawPing */
             }
         }
 
@@ -226,8 +224,8 @@ public class RenderPingHandler {
             AbstractGui.fill(matrixStack, width / 2 - l1 / 2 - 1, k1 - 1, width / 2 + l1 / 2 + 1, k1 + list2.size() * 9, Integer.MIN_VALUE);
 
             for(IReorderingProcessor s3 : list2) {
-                int k5 = mc.fontRenderer.func_243245_a(s3);
-                mc.fontRenderer.func_238407_a_(matrixStack, s3, (float)(width / 2 - k5 / 2), (float)k1, -1);
+                int k5 = mc.font.width(s3);
+                mc.font.drawShadow(matrixStack, s3, (float)(width / 2 - k5 / 2), (float)k1, -1);
                 k1 += 9;
             }
         }

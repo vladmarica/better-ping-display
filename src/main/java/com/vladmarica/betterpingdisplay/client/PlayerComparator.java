@@ -14,11 +14,11 @@ public class PlayerComparator implements Comparator<NetworkPlayerInfo>
 {
     public int compare(NetworkPlayerInfo player1, NetworkPlayerInfo player2)
     {
-        ScorePlayerTeam team1 = player1.getPlayerTeam();
-        ScorePlayerTeam team2 = player2.getPlayerTeam();
+        ScorePlayerTeam team1 = player1.getTeam();
+        ScorePlayerTeam team2 = player2.getTeam();
         return ComparisonChain.start()
-                .compareTrueFirst(player1.getGameType() != GameType.SPECTATOR, player2.getGameType() != GameType.SPECTATOR)
+                .compareTrueFirst(player1.getGameMode() != GameType.SPECTATOR, player2.getGameMode() != GameType.SPECTATOR)
                 .compare(team1 != null ? team1.getName() : "", team2 != null ? team2.getName() : "")
-                .compare(player1.getGameProfile().getName(), player2.getGameProfile().getName()).result();
+                .compare(player1.getProfile().getName(), player2.getProfile().getName()).result();
     }
 }
