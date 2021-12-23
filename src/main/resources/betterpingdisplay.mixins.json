@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "com.vladmarica.betterpingdisplay.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "betterpingdisplay.refmap.json",
+  "client": [
+    "PlayerTabOverlayMixin",
+    "PlayerTabOverlayInvoker"
+  ],
+  "minVersion": "0.8",
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -29,7 +29,7 @@ public class BetterPingDisplayMod {
     }
 
     private void setupClient(final FMLClientSetupEvent event) {
-        MinecraftForge.EVENT_BUS.register(new RenderPingHandler());
+        //MinecraftForge.EVENT_BUS.register(new RenderPingHandler());
     }
 
     public static Logger logger() {

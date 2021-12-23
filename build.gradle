@@ -2,9 +2,11 @@ buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
         mavenCentral()
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.spongepowered:mixingradle:0.7.+'
     }
 }
 
@@ -18,6 +20,7 @@ apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
+apply plugin: 'org.spongepowered.mixin'
 
 version = '1.17.1-1.0'
 group = 'com.vladmarica.betterpingdisplay'
@@ -29,7 +32,7 @@ println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getPro
 minecraft {
     mappings channel: 'official', version: '1.17.1'
 
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    //accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     runs {
         client {
@@ -46,6 +49,8 @@ minecraft {
                     source sourceSets.main
                 }
             }
+
+            arg "-mixin.config=betterpingdisplay.mixins.json"
         }
 
         server {
@@ -90,7 +95,17 @@ dependencies {
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.17.1-37.0.13'
+    minecraft 'net.minecraftforge:forge:1.17.1-37.1.1'
+
+    // Sponge Mixin Annotation Processor
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
+    implementation 'org.spongepowered:mixin:0.8.5'
+}
+
+mixin {
+    add sourceSets.main, 'betterpingdisplay.refmap.json'
+    debug.verbose = true
 }
 
 jar {
@@ -102,6 +117,7 @@ jar {
                 "Implementation-Title": project.name,
                 "Implementation-Version": "${version}",
                 "Implementation-Vendor" :"com.vladmarica",
+                "MixinConfigs" : "betterpingdisplay.mixins.json",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
