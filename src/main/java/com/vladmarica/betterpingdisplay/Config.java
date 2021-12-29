@@ -8,10 +8,10 @@ import org.apache.commons.lang3.tuple.Pair;
 
 
 @Mod.EventBusSubscriber(modid = BetterPingDisplayMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public final class BetterPingDisplayConfig {
+public final class Config {
     public static final ForgeConfigSpec CLIENT_SPEC;
 
-    private static BetterPingDisplayConfig instance = new BetterPingDisplayConfig();
+    private static Config instance = new Config();
     private static final ClientConfig CLIENT;
     private static final int DEFAULT_PING_TEXT_COLOR = 0xA0A0A0;
     private static final String DEFAULT_PING_TEXT_FORMAT = "%dms";
@@ -25,8 +25,8 @@ public final class BetterPingDisplayConfig {
     private int textColor = DEFAULT_PING_TEXT_COLOR;
     private String textFormatString = DEFAULT_PING_TEXT_FORMAT;
 
-    private static BetterPingDisplayConfig from(String textColor, String textFormatString) {
-        BetterPingDisplayConfig config = new BetterPingDisplayConfig();
+    private static Config from(String textColor, String textFormatString) {
+        Config config = new Config();
 
         if (textColor.startsWith("#")) {
             try {
@@ -35,7 +35,7 @@ public final class BetterPingDisplayConfig {
             catch (NumberFormatException ex) {
                 BetterPingDisplayMod
                         .logger()
-                        .error("Config option 'pingTextColor' is invalid - it must be a hex color code");
+                        .error("Config option 'textColor' is invalid - it must be a hex color code");
                 config.textColor = DEFAULT_PING_TEXT_COLOR;
             }
         }
@@ -62,7 +62,7 @@ public final class BetterPingDisplayConfig {
         return textFormatString;
     }
 
-    public static BetterPingDisplayConfig instance() {
+    public static Config instance() {
         return instance;
     }
 
@@ -92,5 +92,5 @@ public final class BetterPingDisplayConfig {
         }
     }
 
-    private BetterPingDisplayConfig() {}
+    private Config() {}
 }

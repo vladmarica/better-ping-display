@@ -38,6 +38,6 @@ public abstract class PlayerTabOverlayMixin {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;renderPingIcon(Lcom/mojang/blaze3d/vertex/PoseStack;IIILnet/minecraft/client/multiplayer/PlayerInfo;)V"))
     private void redirectRenderPingIcon(
             PlayerTabOverlay overlay, PoseStack stack, int width, int x, int y, PlayerInfo player) {
-        RenderPingHandler.renderPingDisplay(minecraft, overlay, stack, width, x, y, player);
+        RenderPingHandler.render(minecraft, overlay, stack, width, x, y, player);
     }
 }
