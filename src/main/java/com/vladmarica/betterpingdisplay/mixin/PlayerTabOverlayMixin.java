@@ -1,7 +1,6 @@
 package com.vladmarica.betterpingdisplay.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.vladmarica.betterpingdisplay.BetterPingDisplayMod;
 import com.vladmarica.betterpingdisplay.client.RenderPingHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.PlayerTabOverlay;

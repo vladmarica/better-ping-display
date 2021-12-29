@@ -1,7 +1,5 @@
 package com.vladmarica.betterpingdisplay;
 
-import com.vladmarica.betterpingdisplay.client.RenderPingHandler;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
