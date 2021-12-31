@@ -10,18 +10,21 @@ import org.apache.logging.log4j.Logger;
 
 @Mod(BetterPingDisplayMod.MODID)
 public class BetterPingDisplayMod {
-    public static final String MODID = "betterpingdisplay";
-    private static final Logger LOGGER = LogManager.getLogger();
+  public static final String MODID = "betterpingdisplay";
+  private static final Logger LOGGER = LogManager.getLogger();
 
-    public BetterPingDisplayMod() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_SPEC);
+  public BetterPingDisplayMod() {
+    ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_SPEC);
 
-        ModLoadingContext.get().registerExtensionPoint(
-                IExtensionPoint.DisplayTest.class,
-                () -> new IExtensionPoint.DisplayTest(() -> FMLNetworkConstants.IGNORESERVERONLY, (a, b) -> true));
-    }
+    ModLoadingContext.get()
+        .registerExtensionPoint(
+            IExtensionPoint.DisplayTest.class,
+            () ->
+                new IExtensionPoint.DisplayTest(
+                    () -> FMLNetworkConstants.IGNORESERVERONLY, (a, b) -> true));
+  }
 
-    public static Logger logger() {
-        return LOGGER;
-    }
+  public static Logger logger() {
+    return LOGGER;
+  }
 }

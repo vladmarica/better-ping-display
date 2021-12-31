@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(PlayerTabOverlay.class)
-public interface  PlayerTabOverlayInvoker {
-    @Invoker("renderPingIcon")
-    void invokeRenderPingIcon(PoseStack stack, int width, int x, int y, PlayerInfo player);
+public interface PlayerTabOverlayInvoker {
+  @Invoker("renderPingIcon")
+  void invokeRenderPingIcon(PoseStack stack, int width, int x, int y, PlayerInfo player);
 }

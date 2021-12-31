@@ -12,24 +12,25 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public final class RenderPingHandler {
-    private static final int PING_TEXT_RENDER_OFFSET = -13;
+  private static final int PING_TEXT_RENDER_OFFSET = -13;
 
-    public static void render(
-            Minecraft mc, PlayerTabOverlay overlay, PoseStack stack, int width, int x, int y, PlayerInfo player) {
-        String pingString = String.format(Config.instance().getTextFormatString(), player.getLatency());
-        int pingStringWidth = mc.font.width(pingString);
-        int pingTextColor = Config.instance().getTextColor();
-        int textX = width + x - pingStringWidth + PING_TEXT_RENDER_OFFSET;
+  public static void render(
+      Minecraft mc,
+      PlayerTabOverlay overlay,
+      PoseStack stack,
+      int width,
+      int x,
+      int y,
+      PlayerInfo player) {
+    String pingString = String.format(Config.instance().getTextFormatString(), player.getLatency());
+    int pingStringWidth = mc.font.width(pingString);
+    int pingTextColor = Config.instance().getTextColor();
+    int textX = width + x - pingStringWidth + PING_TEXT_RENDER_OFFSET;
 
-        // Draw the ping text
-        mc.font.drawShadow(
-                stack,
-                new TextComponent(pingString),
-                textX,
-                y,
-                pingTextColor);
+    // Draw the ping text
+    mc.font.drawShadow(stack, new TextComponent(pingString), textX, y, pingTextColor);
 
-        // Draw the ping bars
-        ((PlayerTabOverlayInvoker) overlay).invokeRenderPingIcon(stack, width, x, y, player);
-    }
+    // Draw the ping bars
+    ((PlayerTabOverlayInvoker) overlay).invokeRenderPingIcon(stack, width, x, y, player);
+  }
 }
