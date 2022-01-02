@@ -24,8 +24,9 @@ public final class Config {
 
   private int textColor = DEFAULT_PING_TEXT_COLOR;
   private String textFormatString = DEFAULT_PING_TEXT_FORMAT;
+  private boolean renderPingBars = false;
 
-  private static Config from(String textColor, String textFormatString) {
+  private static Config from(String textColor, String textFormatString, boolean renderPingBars) {
     Config config = new Config();
 
     if (textColor.startsWith("#")) {
@@ -46,6 +47,8 @@ public final class Config {
           .error("Config option 'textFormatString' is invalid - it needs to contain %d");
     }
 
+    config.renderPingBars = renderPingBars;
+
     return config;
   }
 
@@ -57,6 +60,10 @@ public final class Config {
     return textFormatString;
   }
 
+  public boolean shouldRenderPingBars() {
+    return renderPingBars;
+  }
+
   public static Config instance() {
     return instance;
   }
@@ -64,13 +71,15 @@ public final class Config {
   @SubscribeEvent
   public static void onModConfigEvent(final ModConfigEvent configEvent) {
     if (configEvent.getConfig().getSpec() == CLIENT_SPEC) {
-      instance = from(CLIENT.textColor.get(), CLIENT.textFormatString.get());
+      instance =
+          from(CLIENT.textColor.get(), CLIENT.textFormatString.get(), CLIENT.renderPingBars.get());
     }
   }
 
   private static class ClientConfig {
     public final ForgeConfigSpec.ConfigValue<String> textColor;
     public final ForgeConfigSpec.ConfigValue<String> textFormatString;
+    public final ForgeConfigSpec.ConfigValue<Boolean> renderPingBars;
 
     public ClientConfig(ForgeConfigSpec.Builder builder) {
       textColor =
@@ -87,6 +96,11 @@ public final class Config {
                   "Example: '%dms' will transform into '123ms' if the player's ping is 123",
                   "Default: %dms")
               .define("textFormatString", "%dms");
+
+      renderPingBars =
+          builder
+              .comment("Whether to also draw the default Minecraft ping bars")
+              .define("renderPingBars", false);
     }
   }
 

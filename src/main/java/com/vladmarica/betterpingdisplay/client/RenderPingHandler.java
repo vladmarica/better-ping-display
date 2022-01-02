@@ -22,15 +22,24 @@ public final class RenderPingHandler {
       int x,
       int y,
       PlayerInfo player) {
-    String pingString = String.format(Config.instance().getTextFormatString(), player.getLatency());
+
+    Config config = Config.instance();
+
+    String pingString = String.format(config.getTextFormatString(), player.getLatency());
     int pingStringWidth = mc.font.width(pingString);
-    int pingTextColor = Config.instance().getTextColor();
-    int textX = width + x - pingStringWidth + PING_TEXT_RENDER_OFFSET;
+    int pingTextColor = config.getTextColor();
+
+    int textX = width + x - pingStringWidth;
+    if (config.shouldRenderPingBars()) {
+      textX += PING_TEXT_RENDER_OFFSET;
+    }
 
     // Draw the ping text
     mc.font.drawShadow(stack, new TextComponent(pingString), textX, y, pingTextColor);
 
     // Draw the ping bars
-    ((PlayerTabOverlayInvoker) overlay).invokeRenderPingIcon(stack, width, x, y, player);
+    if (config.shouldRenderPingBars()) {
+      ((PlayerTabOverlayInvoker) overlay).invokeRenderPingIcon(stack, width, x, y, player);
+    }
   }
 }
