@@ -25,8 +25,10 @@ public final class Config {
   private int textColor = DEFAULT_PING_TEXT_COLOR;
   private String textFormatString = DEFAULT_PING_TEXT_FORMAT;
   private boolean renderPingBars = false;
+  private boolean autoColorText = true;
 
-  private static Config from(String textColor, String textFormatString, boolean renderPingBars) {
+  private static Config from(
+      String textColor, String textFormatString, boolean renderPingBars, boolean autoColorText) {
     Config config = new Config();
 
     if (textColor.startsWith("#")) {
@@ -48,6 +50,7 @@ public final class Config {
     }
 
     config.renderPingBars = renderPingBars;
+    config.autoColorText = autoColorText;
 
     return config;
   }
@@ -64,6 +67,10 @@ public final class Config {
     return renderPingBars;
   }
 
+  public boolean shouldAutoColorText() {
+    return autoColorText;
+  }
+
   public static Config instance() {
     return instance;
   }
@@ -72,7 +79,11 @@ public final class Config {
   public static void onModConfigEvent(final ModConfigEvent configEvent) {
     if (configEvent.getConfig().getSpec() == CLIENT_SPEC) {
       instance =
-          from(CLIENT.textColor.get(), CLIENT.textFormatString.get(), CLIENT.renderPingBars.get());
+          from(
+              CLIENT.textColor.get(),
+              CLIENT.textFormatString.get(),
+              CLIENT.renderPingBars.get(),
+              CLIENT.autoColorText.get());
     }
   }
 
@@ -80,12 +91,14 @@ public final class Config {
     public final ForgeConfigSpec.ConfigValue<String> textColor;
     public final ForgeConfigSpec.ConfigValue<String> textFormatString;
     public final ForgeConfigSpec.ConfigValue<Boolean> renderPingBars;
+    public final ForgeConfigSpec.ConfigValue<Boolean> autoColorText;
 
     public ClientConfig(ForgeConfigSpec.Builder builder) {
       textColor =
           builder
               .comment(
-                  "The color of the ping display text, written in hex format. Default: #A0A0A0")
+                  "The color of the ping display text, written in hex format. Default: #A0A0A0",
+                  "Has no effect if 'autoColorText' is set to true")
               .define("textColor", "#A0A0A0");
 
       textFormatString =
@@ -101,6 +114,14 @@ public final class Config {
           builder
               .comment("Whether to also draw the default Minecraft ping bars")
               .define("renderPingBars", false);
+
+      autoColorText =
+          builder
+              .comment(
+                  "Whether to color a player's ping based on their latency.",
+                  "Example: low latency = green, high latency = red",
+                  "If this setting is true, then the 'textColor' setting is ignored")
+              .define("autoColorText", true);
     }
   }
 

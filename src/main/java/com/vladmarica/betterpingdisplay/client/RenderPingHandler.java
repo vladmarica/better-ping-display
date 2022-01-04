@@ -27,7 +27,10 @@ public final class RenderPingHandler {
 
     String pingString = String.format(config.getTextFormatString(), player.getLatency());
     int pingStringWidth = mc.font.width(pingString);
-    int pingTextColor = config.getTextColor();
+    int pingTextColor =
+        config.shouldAutoColorText()
+            ? PingColors.getColor(player.getLatency())
+            : config.getTextColor();
 
     int textX = width + x - pingStringWidth;
     if (config.shouldRenderPingBars()) {
