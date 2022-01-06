@@ -22,7 +22,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '1.17.1-1.0'
+version = '1.17.1-1.1'
 group = 'com.vladmarica.betterpingdisplay'
 archivesBaseName = 'BetterPingDisplay'
 

@@ -16,13 +16,14 @@ license="MIT"
     # The modid of the mod
     modId="betterpingdisplay" #mandatory
     # The version number of the mod - there's a few well known ${} variables useable here or just hardcode it
-    version="1.0" #mandatory
+    version="1.1" #mandatory
      # A display name for the mod
     displayName="Better Ping Display" #mandatory
     # A text field displayed in the mod UI
     authors="Quintinity" #optional
     # The description text for the mod (multi line!) (#mandatory)
     description='''Shows the actual ping number instead of just bars in the player list.'''
+    logoFile="logo.png"
 
     [[dependencies.betterpingdisplay]] #optional
         # the modid of the dependency
