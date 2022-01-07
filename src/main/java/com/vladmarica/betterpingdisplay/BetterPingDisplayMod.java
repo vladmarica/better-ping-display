@@ -4,9 +4,10 @@ import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fmllegacy.network.FMLNetworkConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import static net.minecraftforge.network.NetworkConstants.IGNORESERVERONLY;
 
 @Mod(BetterPingDisplayMod.MODID)
 public class BetterPingDisplayMod {
@@ -21,7 +22,7 @@ public class BetterPingDisplayMod {
             IExtensionPoint.DisplayTest.class,
             () ->
                 new IExtensionPoint.DisplayTest(
-                    () -> FMLNetworkConstants.IGNORESERVERONLY, (a, b) -> true));
+                    () -> IGNORESERVERONLY, (a, b) -> true));
   }
 
   public static Logger logger() {
