@@ -6,7 +6,6 @@ import com.vladmarica.betterpingdisplay.mixin.PlayerTabOverlayInvoker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.PlayerTabOverlay;
 import net.minecraft.client.multiplayer.PlayerInfo;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -38,7 +37,7 @@ public final class RenderPingHandler {
     }
 
     // Draw the ping text
-    mc.font.drawShadow(stack, new TextComponent(pingString), textX, y, pingTextColor);
+    mc.font.drawShadow(stack, pingString, textX, y, pingTextColor);
 
     // Draw the ping bars
     if (config.shouldRenderPingBars()) {
