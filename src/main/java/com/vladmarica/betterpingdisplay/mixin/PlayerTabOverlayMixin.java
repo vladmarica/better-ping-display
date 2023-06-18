@@ -1,8 +1,8 @@
 package com.vladmarica.betterpingdisplay.mixin;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.vladmarica.betterpingdisplay.client.RenderPingHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.PlayerTabOverlay;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import org.spongepowered.asm.mixin.Final;
@@ -36,9 +36,9 @@ public abstract class PlayerTabOverlayMixin {
           @At(
               value = "INVOKE",
               target =
-                  "Lnet/minecraft/client/gui/components/PlayerTabOverlay;renderPingIcon(Lcom/mojang/blaze3d/vertex/PoseStack;IIILnet/minecraft/client/multiplayer/PlayerInfo;)V"))
+                  "Lnet/minecraft/client/gui/components/PlayerTabOverlay;renderPingIcon(Lnet/minecraft/client/gui/GuiGraphics;IIILnet/minecraft/client/multiplayer/PlayerInfo;)V"))
   private void redirectRenderPingIcon(
-      PlayerTabOverlay overlay, PoseStack stack, int width, int x, int y, PlayerInfo player) {
-    RenderPingHandler.render(minecraft, overlay, stack, width, x, y, player);
+      PlayerTabOverlay overlay, GuiGraphics graphics, int width, int x, int y, PlayerInfo player) {
+    RenderPingHandler.render(minecraft, overlay, graphics, width, x, y, player);
   }
 }

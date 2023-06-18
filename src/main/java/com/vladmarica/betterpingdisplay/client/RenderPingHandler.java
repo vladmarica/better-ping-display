@@ -1,9 +1,9 @@
 package com.vladmarica.betterpingdisplay.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.vladmarica.betterpingdisplay.Config;
 import com.vladmarica.betterpingdisplay.mixin.PlayerTabOverlayInvoker;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.PlayerTabOverlay;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraftforge.api.distmarker.Dist;
@@ -16,7 +16,7 @@ public final class RenderPingHandler {
   public static void render(
       Minecraft mc,
       PlayerTabOverlay overlay,
-      PoseStack stack,
+      GuiGraphics graphics,
       int width,
       int x,
       int y,
@@ -37,11 +37,11 @@ public final class RenderPingHandler {
     }
 
     // Draw the ping text
-    mc.font.drawShadow(stack, pingString, textX, y, pingTextColor);
+    graphics.drawString(mc.font, pingString, textX, y, pingTextColor);
 
     // Draw the ping bars
     if (config.shouldRenderPingBars()) {
-      ((PlayerTabOverlayInvoker) overlay).invokeRenderPingIcon(stack, width, x, y, player);
+      ((PlayerTabOverlayInvoker) overlay).invokeRenderPingIcon(graphics, width, x, y, player);
     }
   }
 }
