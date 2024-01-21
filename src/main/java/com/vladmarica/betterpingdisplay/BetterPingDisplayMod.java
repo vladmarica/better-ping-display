@@ -7,7 +7,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static net.minecraftforge.network.NetworkConstants.IGNORESERVERONLY;
+import static net.minecraftforge.fml.IExtensionPoint.DisplayTest.IGNORESERVERONLY;
 
 @Mod(BetterPingDisplayMod.MODID)
 public class BetterPingDisplayMod {
