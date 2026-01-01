@@ -1,11 +1,12 @@
 package com.vladmarica.betterpingdisplay;
 
+import com.vladmarica.betterpingdisplay.client.PingColors;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-@EventBusSubscriber(modid = BetterPingDisplayMod.MODID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = BetterPingDisplayMod.MODID)
 public class Config {
     private static final String DEFAULT_PING_TEXT_COLOR = "#A0A0A0";
     private static final String DEFAULT_PING_TEXT_FORMAT = "%dms";
@@ -73,7 +74,7 @@ public class Config {
 
     @SubscribeEvent
     static void onLoad(final ModConfigEvent builder) {
-        textColor = Integer.parseInt(SPEC_TEXT_COLOR.get().substring(1), 16);
+        textColor = Integer.parseInt(SPEC_TEXT_COLOR.get().substring(1), 16) | PingColors.ALPHA_MASK;
         textFormatString = SPEC_PING_TEXT_FORMAT.get();
         renderPingBars = SPEC_RENDER_PING_BARS.get();
         autoColorText = SPEC_AUTO_COLOR_TEXT.get();
