@@ -2,6 +2,8 @@ package com.vladmarica.betterpingdisplay.client;
 
 import com.google.common.annotations.VisibleForTesting;
 
+import java.awt.*;
+
 public final class ColorUtil {
   public static int interpolate(int colorStart, int colorEnd, float offset) {
     if (offset < 0 || offset > 1) {
@@ -17,6 +19,14 @@ public final class ColorUtil {
     int newBlue = Math.round(getBlue(colorStart) + (blueDiff * offset));
 
     return (newRed << 16) | (newGreen << 8) | newBlue;
+  }
+
+  public static Color parseColor(String s) {
+    return new Color(Integer.parseInt(s.substring(1), 16));
+  }
+
+  public static String colorToString(Color c) {
+    return String.format("#%02x%02x%02x", c.getRed(), c.getGreen(), c.getBlue());
   }
 
   @VisibleForTesting

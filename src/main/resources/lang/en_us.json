@@ -1,0 +1,11 @@
+{
+  "betterpingdisplay.configuration.title": "Better Ping Display Settings",
+  "betterpingdisplay.configuration.autoColorText": "Auto-color Ping Text",
+  "betterpingdisplay.configuration.autoColorText.tooltip": "Whether to color player's ping based on their latency.  E.g, low latency = green, high latency = red",
+  "betterpingdisplay.configuration.renderPingBars": "Render Ping Bars",
+  "betterpingdisplay.configuration.renderPingBars.tooltip": "Whether to also render the default Minecraft ping bars.",
+  "betterpingdisplay.configuration.textColor": "Ping Text Color",
+  "betterpingdisplay.configuration.textColor.tooltip": "The ping text color to use. Only works whens \"autoColorPingText\" is false.",
+  "betterpingdisplay.configuration.textFormatString": "Ping Text Format String",
+  "betterpingdisplay.configuration.textFormatString.tooltip": "The format string for ping text. Must include a \"%d\", which will be replaced dynamically by the actual ping value."
+}

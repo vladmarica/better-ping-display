@@ -1,5 +1,6 @@
 package com.vladmarica.betterpingdisplay;
 
+import com.vladmarica.betterpingdisplay.client.ColorUtil;
 import com.vladmarica.betterpingdisplay.client.PingColors;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -18,12 +19,16 @@ public class Config {
                     "The color of the ping display text, written in hex format. Default: %s\n", DEFAULT_PING_TEXT_COLOR),
                     "Has no effect if 'autoColorText' is set to true")
             .define("textColor", DEFAULT_PING_TEXT_COLOR, o -> {
-                if (!(o instanceof String)) {
+                if (!(o instanceof String s)) {
+                    return false;
+                }
+
+                if (!s.startsWith("#")) {
                     return false;
                 }
 
                 try {
-                    Integer.parseInt(((String) o).substring(1), 16);
+                    Integer.parseInt(s.substring(1), 16);
                     return true;
                 } catch (NumberFormatException e) {
                     return false;
@@ -36,7 +41,7 @@ public class Config {
                     "Must contain a '%d', which will be replaced with the ping number",
                     "Example: '%dms' will transform into '123ms' if the player's ping is 123",
                     String.format("Default: %s", DEFAULT_PING_TEXT_FORMAT))
-            .define("textFormatString", DEFAULT_PING_TEXT_FORMAT);
+            .define("textFormatString", DEFAULT_PING_TEXT_FORMAT, (s) -> ((String) s).contains("%d"));
 
     private static final ModConfigSpec.ConfigValue<Boolean> SPEC_RENDER_PING_BARS = BUILDER
             .comment("Whether to also draw the default Minecraft ping bars")
@@ -49,7 +54,7 @@ public class Config {
                     "If this setting is true, then the 'textColor' setting is ignored")
             .define("autoColorText", true);
 
-    static final ModConfigSpec SPEC = BUILDER.build();
+    public static final ModConfigSpec SPEC = BUILDER.build();
 
     private static int textColor;
     private static String textFormatString;
