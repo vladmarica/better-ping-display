@@ -41,7 +41,13 @@ public class Config {
                     "Must contain a '%d', which will be replaced with the ping number",
                     "Example: '%dms' will transform into '123ms' if the player's ping is 123",
                     String.format("Default: %s", DEFAULT_PING_TEXT_FORMAT))
-            .define("textFormatString", DEFAULT_PING_TEXT_FORMAT, (s) -> ((String) s).contains("%d"));
+            .define("textFormatString", DEFAULT_PING_TEXT_FORMAT, (o) -> {
+                if (!(o instanceof String s)) {
+                    return false;
+                }
+
+                return s.contains("%d");
+            });
 
     private static final ModConfigSpec.ConfigValue<Boolean> SPEC_RENDER_PING_BARS = BUILDER
             .comment("Whether to also draw the default Minecraft ping bars")
