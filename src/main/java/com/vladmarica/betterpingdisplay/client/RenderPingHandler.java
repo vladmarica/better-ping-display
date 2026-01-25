@@ -26,17 +26,23 @@ public final class RenderPingHandler {
             ? PingColors.getColor(player.getLatency())
             : Config.getTextColor();
 
+    boolean renderPingBars = Config.shouldRenderPingBars();
+
     int textX = width + x - pingStringWidth;
-    if (Config.shouldRenderPingBars()) {
-      textX += PING_TEXT_RENDER_OFFSET;
+    if (renderPingBars) {
+        textX += PING_TEXT_RENDER_OFFSET;
     }
 
-    // Draw the ping text
-    graphics.drawString(mc.font, pingString, textX, y, pingTextColor);
+    boolean suppressedByWATUT = WATUTCompat.shouldRenderIdleState(overlay, graphics, width, x, y, player);
 
-    // Draw the ping bars
-    if (Config.shouldRenderPingBars()) {
-      ((PlayerTabOverlayInvoker) overlay).invokeRenderPingIcon(graphics, width, x, y, player);
+    // Draw ping text when either bars are enabled or WATUT doesn't suppress it
+    if (renderPingBars || !suppressedByWATUT) {
+        graphics.drawString(mc.font, pingString, textX, y, pingTextColor);
+    }
+
+    // Draw ping icon only when bars are enabled and not suppressed
+    if (renderPingBars && !suppressedByWATUT) {
+        ((PlayerTabOverlayInvoker) overlay).invokeRenderPingIcon(graphics, width, x, y, player);
     }
   }
 }
