@@ -1,4 +1,4 @@
-package com.vladmarica.betterping.client;
+package com.vladmarica.betterpingdisplay.client;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -15,13 +15,12 @@ import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import org.lwjgl.opengl.GL11;
-
+import com.vladmarica.betterpingdisplay.BetterPingDisplayMod;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class RenderPingHandler {
 
-    @SuppressWarnings("unchecked")
     @SubscribeEvent
     public void onRenderGuiPre(RenderGameOverlayEvent.Pre event)
     {
@@ -69,9 +68,10 @@ public class RenderPingHandler {
                         mc.fontRenderer.drawStringWithShadow(displayName, xPos, yPos, 16777215);
 
                         int ping = player.responseTime;
-                        String str = ping + "ms";
-                        int strWidth = mc.fontRenderer.getStringWidth(str);
-                        mc.fontRenderer.drawStringWithShadow(str, xPos + columnWidth - 18 - strWidth, yPos, 16777215);
+                        String pingString = String.format(BetterPingDisplayMod.textFormatString, ping);
+                        int strWidth = mc.fontRenderer.getStringWidth(pingString);
+                        int pingTextColor = BetterPingDisplayMod.autoColorText ? ColorUtil.getColor(ping) : BetterPingDisplayMod.textColor;
+                        mc.fontRenderer.drawStringWithShadow(pingString, xPos + columnWidth - (BetterPingDisplayMod.renderPingBars ? 18 : 2) - strWidth, yPos, pingTextColor);
 
                         if (scoreobjective != null) {
                             int endX = xPos + mc.fontRenderer.getStringWidth(displayName) + 5;
@@ -83,24 +83,27 @@ public class RenderPingHandler {
                                 mc.fontRenderer.drawStringWithShadow(scoreDisplay, maxX - mc.fontRenderer.getStringWidth(scoreDisplay), yPos, 16777215);
                             }
                         }
+                        
+                        if(BetterPingDisplayMod.renderPingBars) {
+                        	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-                        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-
-                        mc.getTextureManager().bindTexture(Gui.icons);
-                        int pingIndex = 4;
-                        if (ping < 0) pingIndex = 5;
-                        else if (ping < 150) pingIndex = 0;
-                        else if (ping < 300) pingIndex = 1;
-                        else if (ping < 600) pingIndex = 2;
-                        else if (ping < 1000) pingIndex = 3;
-                        drawTexturedModalRect(xPos + columnWidth - 12, yPos, 0, 176 + pingIndex * 8, 10, 8, 100);
+                            mc.getTextureManager().bindTexture(Gui.icons);
+                            int pingIndex = 4;
+                            if (ping < 0) pingIndex = 5;
+                            else if (ping < 150) pingIndex = 0;
+                            else if (ping < 300) pingIndex = 1;
+                            else if (ping < 600) pingIndex = 2;
+                            else if (ping < 1000) pingIndex = 3;
+                            drawTexturedModalRect(xPos + columnWidth - 12, yPos, 0, 176 + pingIndex * 8, 10, 8, 100);
+                        }
                     }
                 }
             }
         }
     }
-
-    private static void drawTexturedModalRect(int x, int y, int u, int v, int width, int height, int zLevel) {
+    
+    private static void drawTexturedModalRect(int x, int y, int u, int v, int width, int height, int zLevel)
+    {
         float f = 0.00390625F;
         float f1 = 0.00390625F;
         Tessellator tessellator = Tessellator.instance;

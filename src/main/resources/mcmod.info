@@ -1,15 +1,15 @@
 [
 {
   "modid": "BetterPing",
-  "name": "Better Ping",
+  "name": "Better Ping Display",
   "description": "Shows the actual ping number instead of just bars in the player list.",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "",
+  "url": "https://www.curseforge.com/minecraft/mc-mods/better-ping-display",
   "updateUrl": "",
-  "authorList": ["Quintinity"],
+  "authorList": ["Quintinity", "Doenerstyle"],
   "credits": "",
-  "logoFile": "",
+  "logoFile": "logo.png",
   "screenshots": [],
   "dependencies": []
 }
